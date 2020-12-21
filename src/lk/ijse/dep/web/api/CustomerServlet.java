@@ -89,7 +89,7 @@ public class CustomerServlet extends HttpServlet {
         resp.setContentType("application/json");
         try ( Connection connection = cp.getConnection()) {
                 PrintWriter out = resp.getWriter();
-                PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer" + ((id != null) ? "WHERE id=?" : ""));
+                PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer" + ((id != null) ? " WHERE id=?" : ""));
                 if (id != null) {
                     pstm.setObject(1, id);
                 }
