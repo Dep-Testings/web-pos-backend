@@ -65,12 +65,14 @@ public class CustomerServlet extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_CREATED);
             }else {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                System.out.println("check 2");
             }
 
         } catch (SQLIntegrityConstraintViolationException ex) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (SQLException throwables){
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            System.out.println("check 1");
             throwables.printStackTrace();
         } catch (JsonbException exp){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
