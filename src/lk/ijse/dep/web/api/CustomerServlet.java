@@ -34,7 +34,7 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*CORS Policy*/
-//        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        //resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         resp.setContentType("application/json");
         //get connection from connection pool and save this Customer Object
@@ -84,7 +84,7 @@ public class CustomerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         /*CORS Policy*/
-//        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+       //resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         String id = req.getParameter("id");
         BasicDataSource cp = (BasicDataSource) getServletContext().getAttribute("cp");
@@ -124,7 +124,7 @@ public class CustomerServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         /*CORS Policy*/
-//        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+         //resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         String id = req.getParameter("id");
         if (id == null || !id.matches("C\\d{3}")){
@@ -162,7 +162,7 @@ public class CustomerServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         /*CORS Policy*/
-//        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        //resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         String id = req.getParameter("id");
         if (id == null || !id.matches("C\\d{3}")){
