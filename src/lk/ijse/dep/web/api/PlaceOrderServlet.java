@@ -4,6 +4,7 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
 import lk.ijse.dep.web.model.Customer;
+import lk.ijse.dep.web.model.PlaceOrder;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.servlet.ServletException;
@@ -17,16 +18,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CustomerServlet", urlPatterns = "/customers")
+@WebServlet(name = "PlaceOrderServlet", urlPatterns = "/placeOrder")
 public class PlaceOrderServlet extends HttpServlet {
-
-   /* @Override
-    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
-        resp.addHeader("Access-Control-Allow-Methods", "GET PUT POST DELETE");
-
-    }*/
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -80,33 +73,30 @@ public class PlaceOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        /*CORS Policy*/
-//        resp.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-        String id = req.getParameter("id");
+        String id = req.getParameter("orderId");
         BasicDataSource cp = (BasicDataSource) getServletContext().getAttribute("cp");
         resp.setContentType("application/json");
         try ( Connection connection = cp.getConnection()) {
                 PrintWriter out = resp.getWriter();
-                PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer" + ((id != null) ? " WHERE id=?" : ""));
+                PreparedStatement pstm = connection.prepareStatement("SELECT * FROM OrderDetail" + ((id != null) ? " WHERE id=?" : ""));
                 if (id != null) {
                     pstm.setObject(1, id);
                 }
                 ResultSet rst = pstm.executeQuery();
-                List<Customer> customerList = new ArrayList<>();
+                List<PlaceOrder> placeOrderList = new ArrayList<>();
                 while (rst.next()) {
                     id = rst.getString(1);
-                    String name = rst.getString(2);
-                    String address = rst.getString(3);
-                    //double salary = rst.getDouble(4);
-                    customerList.add(new Customer(id, name, address));
+                    String itemCode = rst.getString(2);
+                    int qty = rst.getInt(3);
+                    double unitPrice = rst.getDouble(4);
+                    placeOrderList.add(new PlaceOrder(id, itemCode, qty, unitPrice));
                 }
 
-                if (id != null && customerList.isEmpty()) {
+                if (id != null && placeOrderList.isEmpty()) {
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND);
                 } else {
                     Jsonb jsonb = JsonbBuilder.create();
-                    out.println(jsonb.toJson(customerList));
+                    out.println(jsonb.toJson(placeOrderList));
                     connection.close();
                 }
             } catch (SQLException e) {
